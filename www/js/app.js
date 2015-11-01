@@ -4,6 +4,10 @@ angular.module('starter', ['ionic', 'ngStorage'])
 // create a new factory
 .factory ('StorageService', function ($localStorage) {
 
+  $localStorage = $localStorage.$default({
+    things: []
+  });
+
   var _getAll = function () {
     return $localStorage.things;
   };
@@ -17,9 +21,21 @@ angular.module('starter', ['ionic', 'ngStorage'])
   }
 
   return {
-
-    getAll: getAll,
+    getAll: _getAll,
     add: _add,
     remove: _remove
+  };
+})
+
+// controller
+.controller( 'MainCtrl', function ($scope, StorageService) {
+  $scope.things = StorageService.getAll();
+
+  $scope.add = function (newThing) {
+    StorageService.add(newThing);
+  };
+
+  $scope.remove = function (thing) {
+    StorageService.remove(thing);
   };
 })
